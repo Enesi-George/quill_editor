@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
+
+# Navigate to the project directory
+cd /var/www/html
+
 echo "Running composer"
-composer global require hirak/prestissimo
-composer install --no-dev --working-dir=/var/www/html
+composer install --no-dev
+
+echo "Installing NPM dependencies"
+npm install
+
+echo "Building assets"
+npm run build
 
 echo "Caching config..."
 php artisan config:cache
@@ -11,3 +20,9 @@ php artisan route:cache
 
 echo "Running migrations..."
 php artisan migrate --force
+
+echo "Clearing optimized files..."
+php artisan optimize:clear
+
+echo "Optimizing application..."
+php artisan optimize
