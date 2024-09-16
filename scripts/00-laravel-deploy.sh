@@ -4,7 +4,11 @@
 cd /var/www/html
 
 echo "Running composer"
-composer install --no-dev --optimize-autoloader
+composer install --no-dev --optimize-autoloader -vvv
+
+# Verify if Ziggy is installed
+echo "Listing contents of vendor/tightenco/ziggy/dist/"
+ls -l /var/www/html/vendor/tightenco/ziggy/dist/
 
 # Optional: Generate Ziggy routes (uncomment if needed)
 echo "Generating Ziggy routes"

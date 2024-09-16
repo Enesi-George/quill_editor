@@ -21,7 +21,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@': '/resources/js',
-            'ziggy': resolve('vendor/tightenco/ziggy/dist/index.esm.js'),
+            'ziggy': 'ziggy-js', // Use the npm package
         },
     },
 });
