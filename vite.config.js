@@ -18,10 +18,10 @@ export default defineConfig({
             },
         }),
     ],
-    resolve: {
-        alias: {
-            '@': '/resources/js',
-            'ziggy': 'ziggy-js', // Use the npm package
-        },
-    },
+    // resolve: {
+    //     alias: {
+    //         '@': '/resources/js',
+    //         'ziggy': 'ziggy-js', 
+    //     },
+    // },
 });

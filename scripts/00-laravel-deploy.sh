@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
-
-# Navigate to the project directory
-cd /var/www/html
-
 echo "Running composer"
-composer install --no-dev --optimize-autoloader -vvv
-
-echo "Generate application key"
-php artisan key:generate
+composer global require hirak/prestissimo
+composer install --no-dev --working-dir=/var/www/html
 
 echo "Caching config..."
 php artisan config:cache
@@ -18,21 +12,5 @@ php artisan route:cache
 echo "Running migrations..."
 php artisan migrate --force
 
-echo "Clearing optimized files..."
-php artisan optimize:clear
-
-echo "Optimizing application..."
-php artisan optimize
-
-# Optional: Generate Ziggy routes (uncomment if needed)
-# echo "Generating Ziggy routes"
-# php artisan ziggy:generate
-# Verify if Ziggy is installed
-# echo "Listing contents of vendor/tightenco/ziggy/dist/"
-# ls -l /var/www/html/vendor/tightenco/ziggy/dist/
-
-echo "Installing NPM dependencies"
-npm install
-
-echo "Building assets"
+echo "Building frontend assets"
 npm run build
