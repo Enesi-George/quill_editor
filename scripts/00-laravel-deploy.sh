@@ -4,7 +4,11 @@
 cd /var/www/html
 
 echo "Running composer"
-composer install --no-dev
+composer install --no-dev --optimize-autoloader
+
+# Optional: Generate Ziggy routes (uncomment if needed)
+echo "Generating Ziggy routes"
+php artisan ziggy:generate
 
 echo "Installing NPM dependencies"
 npm install
