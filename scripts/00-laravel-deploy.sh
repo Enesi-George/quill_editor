@@ -6,22 +6,8 @@ cd /var/www/html
 echo "Running composer"
 composer install --no-dev --optimize-autoloader -vvv
 
-# Verify if Ziggy is installed
-echo "Listing contents of vendor/tightenco/ziggy/dist/"
-ls -l /var/www/html/vendor/tightenco/ziggy/dist/
-
 echo "Generate application key"
 php artisan key:generate
-
-# Optional: Generate Ziggy routes (uncomment if needed)
-echo "Generating Ziggy routes"
-php artisan ziggy:generate
-
-echo "Installing NPM dependencies"
-npm install
-
-echo "Building assets"
-npm run build
 
 echo "Caching config..."
 php artisan config:cache
@@ -37,3 +23,16 @@ php artisan optimize:clear
 
 echo "Optimizing application..."
 php artisan optimize
+
+# Optional: Generate Ziggy routes (uncomment if needed)
+# echo "Generating Ziggy routes"
+# php artisan ziggy:generate
+# Verify if Ziggy is installed
+# echo "Listing contents of vendor/tightenco/ziggy/dist/"
+# ls -l /var/www/html/vendor/tightenco/ziggy/dist/
+
+echo "Installing NPM dependencies"
+npm install
+
+echo "Building assets"
+npm run build
