@@ -10,6 +10,9 @@ composer install --no-dev --optimize-autoloader -vvv
 echo "Listing contents of vendor/tightenco/ziggy/dist/"
 ls -l /var/www/html/vendor/tightenco/ziggy/dist/
 
+echo "Generate application key"
+php artisan key:generate
+
 # Optional: Generate Ziggy routes (uncomment if needed)
 echo "Generating Ziggy routes"
 php artisan ziggy:generate
@@ -19,9 +22,6 @@ npm install
 
 echo "Building assets"
 npm run build
-
-echo "Generate application key"
-php artisan key:generate
 
 echo "Caching config..."
 php artisan config:cache
