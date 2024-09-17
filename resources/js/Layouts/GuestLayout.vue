@@ -7,6 +7,7 @@ import { ArrowLeftIcon } from "@heroicons/vue/24/outline";
 const welcomeMessage = ref("");
 const fullMessage = "Welcome to Quill Application Website";
 const { url } = usePage();
+const isTypingComplete = ref(false);
 
 const typeMessage = () => {
     let index = 0;
@@ -16,6 +17,7 @@ const typeMessage = () => {
             index++;
         } else {
             clearInterval(typingInterval);
+            isTypingComplete.value = true;
         }
     }, 100);
 };
@@ -36,7 +38,7 @@ onMounted(() => {
             class="hidden md:flex min-h-screen w-1/2 bg-red-200 items-center justify-center p-8"
         >
             <div class="text-center">
-                <h2 class="text-2xl font-bold sm:text-3xl">
+                <h2 class="text-2xl font-bold sm:text-3xl" :class="{ 'typing-complete': isTypingComplete }">
                     {{ welcomeMessage }}
                 </h2>
                 <p class="mt-4">Where you get to edit HTML content.</p>
@@ -78,6 +80,12 @@ h2 {
     border-right: 4px solid;
     width: fit-content;
     animation: typing 4s steps(30, end), blink-caret 0.75s step-end infinite;
+}
+
+/* Remove border when typing is complete */
+h2.typing-complete {
+    border-right: none;
+    animation: typing 4s steps(30, end);
 }
 
 /* Blinking cursor animation */

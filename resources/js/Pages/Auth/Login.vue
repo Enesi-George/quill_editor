@@ -37,7 +37,7 @@ const submit = () => {
             toast.success("login successful"), form.reset("password");
         },
         onError: () => {
-            toast.error("Login failed. Please contact the administrative");
+            toast.error("Login failed");
         },
     });
 };

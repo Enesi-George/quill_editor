@@ -26,7 +26,7 @@ const submit = () => {
         },
         onError: () => {
             toast.error(
-                "Registeration failed. Please contact the administrative"
+                "Registeration failed"
             );
         },
     });
