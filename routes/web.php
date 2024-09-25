@@ -30,7 +30,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/save-content', [QuillContentController::class, 'store']);
     Route::get('/fetch-content', [QuillContentController::class, 'getContent']); 
-    Route::delete('/delete-content/{id}', [QuillContentController::class, 'destroy']);
 
 });
 
