@@ -13,7 +13,7 @@ class QuillContentController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -46,18 +46,6 @@ class QuillContentController extends Controller
         }
 
         return back()->with('message', 'Content saved successfully.');
-    }
-
-    public function getContent()
-    {
-        $userId = Auth::id();
-        $content = QuillContent::query()
-            ->where('user_id', $userId)
-            ->first();
-
-        return response()->json([
-            'content' => $content ? $content->content : '<p>Start editing here!</p>',
-        ]);
     }
 
     /**

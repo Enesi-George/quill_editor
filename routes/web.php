@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/save-content', [QuillContentController::class, 'store']);
-    Route::get('/fetch-content', [QuillContentController::class, 'getContent']); 
+    // Route::get('/fetch-content', [QuillContentController::class, 'index']); 
 
 });
 

@@ -4,7 +4,7 @@ import { Head } from '@inertiajs/vue3';
 import QuillEditorComponent from '@/Components/QuillEditorComponent.vue';
 
 const props = defineProps({
-  initialContent: {
+  content: {
     type: String,
     default: '<p>Start editing here!</p>'
   }
@@ -20,7 +20,8 @@ const props = defineProps({
         </template>
 
         <div class="py-12">
-            <QuillEditorComponent :initial-html-content="initialContent" />
+            <!-- Passing content to the QuillEditorComponent -->
+            <QuillEditorComponent :content="content"/>
         </div>
     </AuthenticatedLayout>
 </template>

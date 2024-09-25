@@ -15,10 +15,12 @@ class DashboardController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        $quillContent = QuillContent::where('user_id', $userId)->first();
-
+        $quillContent = QuillContent::query()
+            ->where('user_id', $userId)
+            ->first();
+    
         return Inertia::render('Dashboard', [
-            'initialContent' => $quillContent ? $quillContent->content : 'Start your edit here!'
+            'content' => $quillContent ? $quillContent->content : 'Start your edit here!'
         ]);
     }
 
