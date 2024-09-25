@@ -30,25 +30,34 @@ class QuillContentController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'content'=> 'required|string'
+            'content' => 'required|string',
         ]);
+
         $userId = Auth::id();
+
+        // Use updateOrCreate to save or update user's content
         $content = QuillContent::updateOrCreate(
             ['user_id' => $userId],
             ['content' => $validatedData['content']]
         );
-        if(!$content){
-            return back()->with('error', 'An error has occur. Please contact the administrative.');
-        };
+
+        if (!$content) {
+            return back()->with('error', 'An error occurred. Please contact the admin.');
+        }
+
         return back()->with('message', 'Content saved successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(QuillContent $quillContent)
+    public function getContent()
     {
-        //
+        $userId = Auth::id();
+        $content = QuillContent::query()
+            ->where('user_id', $userId)
+            ->first();
+
+        return response()->json([
+            'content' => $content ? $content->content : '<p>Start editing here!</p>',
+        ]);
     }
 
     /**

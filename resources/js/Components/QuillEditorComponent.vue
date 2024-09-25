@@ -3,17 +3,20 @@
     <div v-if="message" class="mt-4 p-4" :class="messageClass">
       {{ message }}
     </div>
+
     <div class="my-10 mb-24">
       <h3 class="text-lg font-semibold mb-2">Rendered Content Preview:</h3>
-      <div v-html="htmlContent" class="ql-editor border p-4 rounded"></div>
+      <div v-html="sanitizedContent" class="ql-editor border p-4 rounded"></div>
     </div>
 
     <QuillEditor
+      ref="quillEditor"
       v-model:content="htmlContent"
       :options="editorOptions"
       @update:content="onEditorChange"
       contentType="html"
     />
+
     <div class="mt-4 flex justify-between items-center">
       <PrimaryButton
         @click="saveContent"
@@ -34,6 +37,7 @@ import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import { router } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import axios from "axios";
 
 export default {
   name: "QuillEditorComponent",
@@ -44,12 +48,13 @@ export default {
   props: {
     initialHtmlContent: {
       type: String,
-      default: "Start your editing here!",
+      default: "<p>Start your editing here!</p>",
     },
   },
   data() {
     return {
       htmlContent: this.initialHtmlContent,
+      sanitizedContent: this.initialHtmlContent,
       originalHtmlContent: this.initialHtmlContent,
       isDirty: false,
       message: "",
@@ -69,29 +74,45 @@ export default {
             [{ size: ["small", false, "large", "huge"] }],
             [{ header: [1, 2, 3, 4, 5, 6, false] }],
             [{ color: [] }, { background: [] }],
-            [{ font: [] }],
-            [{ align: [] }],
-            ["clean"],
+            [{ font: [] }], 
+            [{ align: [] }], 
+            ["clean","link","image","video"], 
           ],
         },
       },
     };
   },
+  mounted() {
+    this.fetchContent();
+  },
   methods: {
     onEditorChange(content) {
       this.htmlContent = content;
-      this.isDirty = this.htmlContent !== this.originalHtmlContent;
+      this.sanitizedContent = this.sanitizeLinks(content);
+      this.isDirty = this.sanitizedContent !== this.originalHtmlContent;
+    },
+    fetchContent() {
+      axios
+        .get("/fetch-content")
+        .then((response) => {
+          this.htmlContent = response.data.content;
+          this.sanitizedContent = this.sanitizeLinks(response.data.content);
+          this.originalHtmlContent = this.sanitizedContent;
+        })
+        .catch((error) => {
+          console.error("Error fetching content:", error);
+        });
     },
     saveContent() {
       this.processing = true;
       router.post(
         "/save-content",
-        { content: this.htmlContent },
+        { content: this.sanitizedContent },
         {
           preserveState: true,
           preserveScroll: true,
           onSuccess: () => {
-            this.originalHtmlContent = this.htmlContent;
+            this.originalHtmlContent = this.sanitizedContent;
             this.isDirty = false;
             this.processing = false;
             toast.success("Content saved successfully");
@@ -103,6 +124,24 @@ export default {
         }
       );
     },
+    sanitizeLinks(content) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(content, "text/html");
+      const links = doc.querySelectorAll("a");
+
+      links.forEach((link) => {
+        let href = link.getAttribute("href");
+        if (
+          href &&
+          !href.startsWith("http://") &&
+          !href.startsWith("https://")
+        ) {
+          link.setAttribute("href", "https://" + href);
+        }
+      });
+
+      return doc.body.innerHTML;
+    },
   },
 };
 </script>
@@ -112,5 +151,4 @@ export default {
   max-width: 800px;
   margin: 0 auto;
 }
-
 </style>

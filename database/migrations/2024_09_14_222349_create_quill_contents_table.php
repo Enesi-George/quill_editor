@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('quill_contents', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
+            $table->text('content');
             $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
